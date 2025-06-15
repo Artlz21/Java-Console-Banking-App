@@ -28,7 +28,7 @@ public class Transactions {
             }
 
             from.setBalance(from.getBalance() - amount);
-            to.setBalance(amount);
+            to.setBalance(to.getBalance() + amount);
             
             return true;
         } 
@@ -45,7 +45,7 @@ public class Transactions {
             }
 
             from.setBalance(from.getBalance() - amount);
-            to.setBalance(amount);
+            to.setBalance(to.getBalance() + amount);
 
             return true;
         } 
@@ -62,7 +62,7 @@ public class Transactions {
             }
 
             from.setBalance(from.getBalance() - amount);
-            to.setBalance(amount);
+            to.setBalance(to.getBalance() + amount);
 
             return true;
         } 
@@ -79,7 +79,7 @@ public class Transactions {
             }
 
             from.setBalance(from.getBalance() - amount);
-            to.setBalance(amount);
+            to.setBalance(to.getBalance() + amount);
 
             return true;
         } 

@@ -2,11 +2,13 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class DataHandling {
-    private HashMap<Integer, User> usersStorage;
-    private HashMap<Integer, CheckingAccount> checkingAccountsStorage;
-    private HashMap<Integer, SavingsAccount> savingsAccountsStorage;
+    private final HashMap<String, Integer> userNameStorage;
+    private final HashMap<Integer, User> usersStorage;
+    private final HashMap<Integer, CheckingAccount> checkingAccountsStorage;
+    private final HashMap<Integer, SavingsAccount> savingsAccountsStorage;
 
     public DataHandling() {
+        userNameStorage = new HashMap<>();
         usersStorage = new HashMap<>();
         checkingAccountsStorage = new HashMap<>();
         savingsAccountsStorage = new HashMap<>();
@@ -18,8 +20,9 @@ public class DataHandling {
         while (usersStorage.containsKey(id)){
             id = 1000 + random.nextInt(9000);
         }
-        User newUser = new User(firstName, firstName, userName, password, id);
-        usersStorage.put(usersStorage.size()+1, newUser);
+        User newUser = new User(firstName, secondName, userName, password, id);
+        userNameStorage.put(userName, id);
+        usersStorage.put(id, newUser);
         return newUser;
     }
 
@@ -35,14 +38,35 @@ public class DataHandling {
         return newSavingsAccount;
     }
 
-    public User RetrieveUser(int accountID, String password) {
-        User targetUser = usersStorage.get(accountID);
-        return targetUser;
+    public User RetrieveUser(String userName, String password) {
+        try {
+            Integer id = userNameStorage.get(userName);
+            User targetUser = usersStorage.get(id);
+            return targetUser;
+        } 
+        catch (Exception e) {
+            System.err.println("Error user could not be retrieved.");
+            return null;
+        }
     }
+    
     public CheckingAccount RetrieveChecking(int id) {
-        return checkingAccountsStorage.get(id);
+        try {
+            return checkingAccountsStorage.get(id);
+        } 
+        catch (Exception e) {
+            System.err.println("Error account could not be retrieved.");
+            return null;
+        }
     }
+    
     public SavingsAccount RetrieveSavings(int id) {
-        return savingsAccountsStorage.get(id);
+        try {
+            return savingsAccountsStorage.get(id);
+        } 
+        catch (Exception e) {
+            System.err.println("Error account could not be retrieved.");
+            return null;
+        }
     }
 }
