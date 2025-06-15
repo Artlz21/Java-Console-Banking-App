@@ -1,5 +1,3 @@
-import java.util.Random;
-
 public class User {
     private final String firstName;
     private final String lastName;
@@ -9,13 +7,12 @@ public class User {
     private int checkingAccountID;
     private int savingsAccountID;
 
-    public User(String firstName, String lastName, String userName, String password) {
-        Random random = new Random();
+    public User(String firstName, String lastName, String userName, String password, int id) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
-        this.accountID = 1000 + random.nextInt(9000);
+        this.accountID = id;
     }
 
     public String getFirstName() {

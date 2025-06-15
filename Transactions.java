@@ -38,6 +38,40 @@ public class Transactions {
         }
     }
 
+    public static boolean Transfer(CheckingAccount from, CheckingAccount to, double amount) {
+        try {
+            if (from.getBalance() < amount) {
+                return false;
+            }
+
+            from.setBalance(from.getBalance() - amount);
+            to.setBalance(amount);
+
+            return true;
+        } 
+        catch (Exception e) {
+            System.err.println("Transaction error, process did not complete");
+            return false;
+        }
+    }
+
+    public static boolean Transfer(SavingsAccount from, CheckingAccount to, double amount) {
+        try {
+            if (from.getBalance() < amount) {
+                return false;
+            }
+
+            from.setBalance(from.getBalance() - amount);
+            to.setBalance(amount);
+
+            return true;
+        } 
+        catch (Exception e) {
+            System.err.println("Transaction error, process did not complete");
+            return false;
+        }
+    }
+
     public static boolean Transfer(SavingsAccount from, SavingsAccount to, double amount) {
         try {
             if (from.getBalance() < amount) {
