@@ -7,9 +7,10 @@ public class Menu {
         System.out.println("Enter a number to select option.");
         System.out.println("1) Sign in");
         System.out.println("2) Create account");
+        System.out.println("0) Exit");
     }
 
-    public String[] LoginMenu(DataHandling dataHandling) {
+    public String[] LoginMenu() {
         try (Scanner input = new Scanner(System.in)) {
             System.out.println("Big Banking Login");
             System.out.println("------------------------");
@@ -51,6 +52,17 @@ public class Menu {
         System.out.println("------------------------");
         System.out.println("1) Checking account");
         System.out.println("2) Savings account");
+        System.out.println("0) Exit");        
+    }
+
+    public void UserMainMenu(User user) {
+        System.out.println("Welcome " + user.getUserName() + "!");
+        System.out.println("Account ID: " + user.getAccountID());
+        System.out.println("------------------------");
+        System.out.println("Select an option");
+        System.out.println("1) Create Savings account");
+        System.out.println("2) Create Checking account");
+        System.out.println("0) Exit.");
     }
 
     public void UserMainMenu(User user, SavingsAccount savingsAccount) {
@@ -64,7 +76,6 @@ public class Menu {
         System.out.println("Select an option");
         System.out.println("1) Go to Savings account");
         System.out.println("2) Create Checking account");
-        System.out.println("3) Create Savings account");
         System.out.println("0) Exit.");
     }
 
@@ -78,8 +89,7 @@ public class Menu {
         System.out.println("------------------------");
         System.out.println("Select an option");
         System.out.println("1) Go to Checking account");
-        System.out.println("2) Create Checking account");
-        System.out.println("3) Create Savings account");
+        System.out.println("2) Create Savings account");
         System.out.println("0) Exit.");
     }
 
@@ -96,8 +106,6 @@ public class Menu {
         System.out.println("Select an option");
         System.out.println("1) Go to Checking account");
         System.out.println("2) Go to Savings account");
-        System.out.println("3) Create Checking account");
-        System.out.println("4) Create Savings account");
         System.out.println("0) Exit.");
     }
 
