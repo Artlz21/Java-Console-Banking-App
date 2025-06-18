@@ -29,12 +29,14 @@ public class DataHandling {
     public CheckingAccount CreateCheckingAccount(int userID) {
         CheckingAccount newCheckingAccount = new CheckingAccount(userID);
         checkingAccountsStorage.put(userID, newCheckingAccount);
+        usersStorage.get(userID).setCheckingAccountID(newCheckingAccount.getCheckingAccountID());
         return newCheckingAccount;
     }
 
     public SavingsAccount CreateSavingsAccount(int userID) {
         SavingsAccount newSavingsAccount = new SavingsAccount(userID);
         savingsAccountsStorage.put(userID, newSavingsAccount);
+        usersStorage.get(userID).setSavingsAccountID(newSavingsAccount.getSavingsAccountID());
         return newSavingsAccount;
     }
 

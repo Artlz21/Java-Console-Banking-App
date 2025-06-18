@@ -9,7 +9,6 @@ public class Main {
         Scanner input = new Scanner(System.in);
         Menu menu = new Menu();
         DataHandling data = new DataHandling();
-        Transactions transaction = new Transactions();
         User user = null;
 
         boolean runApp = true;
@@ -36,11 +35,10 @@ public class Main {
 
                     user = data.RetrieveUser(userInput[0]);
 
-                    // Assume both might exist (simplified example)
                     checkingAccount = data.RetrieveChecking(user.getAccountID());
                     savingsAccount = data.RetrieveSavings(user.getAccountID());
 
-                    showUserMenu(input, user, checkingAccount, savingsAccount, menu, data, transaction);
+                    showUserMenu(input, user, checkingAccount, savingsAccount, menu, data);
                     break;
 
                 case 2: // Sign up
@@ -62,7 +60,7 @@ public class Main {
                     else if (acctChoice == 2)
                         savingsAccount = data.CreateSavingsAccount(user.getAccountID());
 
-                    showUserMenu(input, user, checkingAccount, savingsAccount, menu, data, transaction);
+                    showUserMenu(input, user, checkingAccount, savingsAccount, menu, data);
                     break;
 
                 default:
@@ -73,8 +71,9 @@ public class Main {
         }
     }
 
-    private static void showUserMenu(Scanner input, User user, CheckingAccount checking, SavingsAccount savings, Menu menu, DataHandling data, Transactions transaction) {
+    private static void showUserMenu(Scanner input, User user, CheckingAccount checking, SavingsAccount savings, Menu menu, DataHandling data) {
         boolean userMenu = true;
+
         while (userMenu) {
             if (checking != null && savings != null) {
                 menu.UserMainMenu(user, checking, savings);
@@ -91,35 +90,135 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    if (checking != null) {
-                        menu.AccountMenu(checking);
-                        int option = input.nextInt();
+                    // Access account
+                    if (checking != null && savings != null) {
+                        System.out.println("Select account to access:");
+                        System.out.println("1) Checking");
+                        System.out.println("2) Savings");
+                        int acctChoice = input.nextInt();
                         input.nextLine();
-                        // Add transaction logic here
+
+                        if (acctChoice == 1) {
+                            handleCheckingMenu(input, checking, savings);
+                        } else if (acctChoice == 2) {
+                            handleSavingsMenu(input, savings, checking);
+                        }
+                    } else if (checking != null) {
+                        handleCheckingMenu(input, checking, savings);
                     } else if (savings != null) {
-                        menu.AccountMenu(savings);
-                        int option = input.nextInt();
-                        input.nextLine();
-                        // Add transaction logic here
+                        handleSavingsMenu(input, savings, checking);
+                    } else {
+                        System.out.println("No accounts found.");
                     }
                     break;
+
                 case 2:
+                    // Create additional account
                     if (checking == null) {
                         checking = data.CreateCheckingAccount(user.getAccountID());
                     } else if (savings == null) {
                         savings = data.CreateSavingsAccount(user.getAccountID());
                     }
                     break;
+
                 case 0:
                     userMenu = false;
                     break;
+
                 default:
                     System.out.println("Invalid selection.");
             }
         }
     }
 
+    private static void handleCheckingMenu(Scanner input, CheckingAccount checking, SavingsAccount savings) {
+        Menu menu = new Menu();
+        menu.AccountMenu(checking);
+        int option = input.nextInt();
+        input.nextLine();
+
+        switch (option) {
+            case 1: // Deposit
+                System.out.print("Enter amount to deposit: ");
+                double deposit = input.nextDouble();
+                input.nextLine();
+                if (Transactions.Deposit(checking, deposit)) {
+                    System.out.println("Deposit successful.");
+                } else {
+                    System.out.println("Deposit failed.");
+                }
+                break;
+            case 2: // Transfer to savings
+                if (savings == null) {
+                    System.out.println("No savings account to transfer to.");
+                    break;
+                }
+                System.out.print("Enter amount to transfer to savings: ");
+                double transfer = input.nextDouble();
+                input.nextLine();
+                if (Transactions.Transfer(checking, savings, transfer)) {
+                    System.out.println("Transfer successful.");
+                } else {
+                    System.out.println("Transfer failed. Check funds.");
+                }
+                break;
+            case 3: // Withdraw
+                System.out.print("Enter amount to withdraw: ");
+                int withdraw = input.nextInt();
+                input.nextLine();
+                if (Transactions.Withdraw(checking, withdraw)) {
+                    System.out.println("Withdrawal successful.");
+                } else {
+                    System.out.println("Withdrawal failed. Check funds.");
+                }
+                break;
+            case 0:
+                break;
+            default:
+                System.out.println("Invalid option.");
+        }
+    }
+
+    private static void handleSavingsMenu(Scanner input, SavingsAccount savings, CheckingAccount checking) {
+        Menu menu = new Menu();
+        menu.AccountMenu(savings);
+        int option = input.nextInt();
+        input.nextLine();
+
+        switch (option) {
+            case 1: // Deposit
+                System.out.print("Enter amount to deposit: ");
+                double deposit = input.nextDouble();
+                input.nextLine();
+                if (Transactions.Deposit(savings, deposit)) {
+                    System.out.println("Deposit successful.");
+                } else {
+                    System.out.println("Deposit failed.");
+                }
+                break;
+            case 2: // Transfer to checking
+                if (checking == null) {
+                    System.out.println("No checking account to transfer to.");
+                    break;
+                }
+                System.out.print("Enter amount to transfer to checking: ");
+                double transfer = input.nextDouble();
+                input.nextLine();
+                if (Transactions.Transfer(savings, checking, transfer)) {
+                    System.out.println("Transfer successful.");
+                } else {
+                    System.out.println("Transfer failed. Check funds.");
+                }
+                break;
+            case 0:
+                break;
+            default:
+                System.out.println("Invalid option.");
+        }
+    }
+
     private static boolean CheckForExistingUser(DataHandling data, String[] userInput) {
-        return data.RetrieveUser(userInput[0]) != null;
+        User user = data.RetrieveUser(userInput[0]);
+        return user != null && user.getPassword().equals(userInput[1]);
     }
 }
