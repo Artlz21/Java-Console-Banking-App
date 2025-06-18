@@ -17,7 +17,7 @@ public class DataHandling {
     public User CreateUser(String firstName, String secondName, String password, String userName) {
         Random random = new Random();
         int id = 1000 + random.nextInt(9000);
-        while (usersStorage.containsKey(id)){
+        while (usersStorage.containsKey(id)) {
             id = 1000 + random.nextInt(9000);
         }
         User newUser = new User(firstName, secondName, userName, password, id);
@@ -28,17 +28,17 @@ public class DataHandling {
 
     public CheckingAccount CreateCheckingAccount(int userID) {
         CheckingAccount newCheckingAccount = new CheckingAccount(userID);
-        checkingAccountsStorage.put(checkingAccountsStorage.size()+1, newCheckingAccount);
+        checkingAccountsStorage.put(userID, newCheckingAccount);
         return newCheckingAccount;
     }
 
     public SavingsAccount CreateSavingsAccount(int userID) {
         SavingsAccount newSavingsAccount = new SavingsAccount(userID);
-        savingsAccountsStorage.put(savingsAccountsStorage.size()+1, newSavingsAccount);
+        savingsAccountsStorage.put(userID, newSavingsAccount);
         return newSavingsAccount;
     }
 
-    public User RetrieveUser(String userName, String password) {
+    public User RetrieveUser(String userName) {
         try {
             Integer id = userNameStorage.get(userName);
             User targetUser = usersStorage.get(id);
